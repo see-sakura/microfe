@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Tailwind v4 自定义主题变量 */
+@theme inline {
+  --color-background: #050816;
+  --color-foreground: #e9f2ff;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* 清除 Tailwind 默认的暗色强制覆盖 */
+@layer base {
+  html {
+    background-color: #050816;
+    color: #e9f2ff;
+  }
+  body {
+    background-color: #050816;
+    color: #e9f2ff;
+  }
+}

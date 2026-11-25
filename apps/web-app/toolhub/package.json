@@ -1,5 +1,5 @@
 {
-  "name": "science-tool",
+  "name": "toolhub",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -22,6 +22,5 @@
     "eslint-config-next": "16.4.6",
     "tailwindcss": "4.3.3",
     "typescript": "^5"
-  },
-  "packageManager": "yarn@1.22.22"
+  }
 }

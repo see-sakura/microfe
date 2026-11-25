@@ -1,5 +1,6 @@
-packages:  
-    # 放你的项目 
-    - 'apps/*'  
+packages:
+    # 放你的项目（支持 apps/web-app/* 多层嵌套）
+    - "apps/*"
+    - "apps/web-app/*"
     # 公共组件，工具库
-    - 'packages/*' 
+    - "packages/*"

@@ -24,7 +24,9 @@ export default function Header({ categories, active, onChange }: HeaderProps) {
   }, []);
 
   useEffect(() => {
-    const API_KEY = "eea0ca06a1c82fd12a65a16669dffb62";
+    const API_KEY =
+      process.env.NEXT_PUBLIC_OPENWEATHERMAP_KEY ??
+      "eea0ca06a1c82fd12a65a16669dffb62";
     const controller = new AbortController();
     let weatherTimeout: ReturnType<typeof setTimeout> | undefined;
     let mounted = true;
@@ -62,6 +64,16 @@ export default function Header({ categories, active, onChange }: HeaderProps) {
       API_KEY +
       "&units=metric&lang=zh_cn";
 
+    if (!API_KEY || API_KEY === "eea0ca06a1c82fd12a65a16669dffb62") {
+      // 未配置 API Key 或仍是默认占位 → 直接用城市接口（省去一次 geolocation 失败的往返）
+      fetchWeather(byCityUrl);
+      return () => {
+        mounted = false;
+        controller.abort();
+        if (weatherTimeout) clearTimeout(weatherTimeout);
+      };
+    }
+
     if (
       typeof navigator !== "undefined" &&
       navigator.geolocation &&
@@ -70,7 +82,6 @@ export default function Header({ categories, active, onChange }: HeaderProps) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           if (!mounted) return;
-          console.log(pos);
           const { latitude: lat, longitude: lon } = pos.coords;
           const byCoordUrl =
             "https://api.openweathermap.org/data/2.5/weather?lat=" +
@@ -82,7 +93,7 @@ export default function Header({ categories, active, onChange }: HeaderProps) {
             "&units=metric&lang=zh_cn";
           fetchWeather(byCoordUrl);
         },
-        (err) => {
+        () => {
           if (!mounted) return;
           // 定位失败：权限拒绝 / 位置不可用 / 超时 → 回退到上海
           fetchWeather(byCityUrl);
